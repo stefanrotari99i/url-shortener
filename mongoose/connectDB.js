@@ -5,7 +5,7 @@ async function dbConnect() {
         throw new Error("MONGO_URI is missing");
     }
 
-    const connection = await mongoose.connect(process.env.MONGO_URI, {
+    const connection = await mongoose.connect(process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
