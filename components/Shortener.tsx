@@ -56,7 +56,7 @@ const Shortener = () => {
     };
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(`${window.location.origin}/${result}`);
+        navigator.clipboard.writeText(`${window.location.origin}/r/${result}`);
     };
 
     const resetForm = () => {
