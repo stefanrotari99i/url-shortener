@@ -5,7 +5,6 @@ import Button from "./Button";
 import Input from "./Input";
 import { validateUrl } from "@/utils/validateUrl";
 
-
 const Shortener = () => {
     let [url, setUrl] = useState("");
     let [isLoading, setIsLoading] = useState(false);
@@ -15,14 +14,14 @@ const Shortener = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("");
+        setIsLoading(true);
 
-
-        if(!validateUrl(url)) {
+        if (!validateUrl(url)) {
             setError("Please add a valid link");
+            setIsLoading(false);
             return;
         }
 
-        setIsLoading(true);
         try {
             const response = await fetch("/api/url/", {
                 method: "POST",
@@ -52,7 +51,6 @@ const Shortener = () => {
 
         setIsLoading(false);
         setError("");
-
     };
 
     const copyToClipboard = () => {
@@ -78,9 +76,11 @@ const Shortener = () => {
             className="flex items-center gap-4 w-full relative flex-col md:flex-row"
             onSubmit={handleSubmit}
         >
-            <p className="text-red-500 text-md font-semibold absolute -top-8">
-                {error}
-            </p>
+            {error && (
+                <p className="text-red-500 text-md font-semibold absolute -top-8 pointer-events-none">
+                    {error}
+                </p>
+            )}
             {result ? (
                 <div
                     className="bg-transparent backdrop-blur-lg h-12 cursor-pointer text-violet-100 font-medium text-md py-2 px-4 rounded-2xl ring-2 ring-violet-500 focus:outline-none focus:text-neutral-100  focus:ring-violet-600 focus:border-transparent  flex-1 flex items-center"
@@ -89,10 +89,17 @@ const Shortener = () => {
                     <span className="flex-1">
                         {window.location.origin}/r/{result}
                     </span>
-                    <button type="button" className="bg-transparent text-violet-500 hover:text-violet-700 focus:outline-none active:scale-105">
+                    <button
+                        type="button"
+                        className="bg-transparent text-violet-500 hover:text-violet-700 focus:outline-none active:scale-105"
+                    >
                         <BiCopy className="text-xl" onClick={copyToClipboard} />
                     </button>
-                    <button type="button" className="ml-4 bg-transparent text-violet-500 hover:text-violet-700 focus:outline-none active:scale-105" onClick={shareUrl}>
+                    <button
+                        type="button"
+                        className="ml-4 bg-transparent text-violet-500 hover:text-violet-700 focus:outline-none active:scale-105"
+                        onClick={shareUrl}
+                    >
                         <BiShareAlt className="text-xl" />
                     </button>
                 </div>
