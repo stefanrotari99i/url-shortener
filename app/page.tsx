@@ -1,24 +1,15 @@
 import ShortenItem from "@/components/ShortenItem";
 import Shortener from "@/components/Shortener";
-import Url from "@/model/urlModel";
-import dbConnect from "@/mongoose/connectDB";
+import getData from "@/utils/getData";
 import { Suspense } from "react";
 
-export const revalidate  = 3600;
-
-async function getData() {
-    await dbConnect();
-    const data = await Url.find({}).sort({ createdAt: -1 }).limit(9);
-    console.log(data);
-    if (!data) {
-        throw new Error("No data found");
-    }
-
-    return data;
-}
+const getShortenItems = async () => {
+    const rest = await getData();
+    return rest;
+};
 
 export default async function Home() {
-    const data = await getData();
+    const data = await JSON.parse(JSON.stringify(await getShortenItems()));
 
     console.log(data);
 
