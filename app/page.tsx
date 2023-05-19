@@ -9,7 +9,7 @@ export const revalidate  = 3600;
 async function getData() {
     await dbConnect();
     const data = await Url.find({}).sort({ createdAt: -1 }).limit(9);
-
+    console.log(data);
     if (!data) {
         throw new Error("No data found");
     }
@@ -19,6 +19,8 @@ async function getData() {
 
 export default async function Home() {
     const data = await getData();
+
+    console.log(data);
 
     return (
         <main className="flex min-h-screen flex-col items-center py-20">

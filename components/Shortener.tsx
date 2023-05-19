@@ -16,6 +16,8 @@ const Shortener = () => {
         setError("");
         setIsLoading(true);
 
+
+
         if (!validateUrl(url)) {
             setError("Please add a valid link");
             setIsLoading(false);

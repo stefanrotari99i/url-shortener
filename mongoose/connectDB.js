@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 async function dbConnect() {
-    if(!process.env.MONGO_URI) {
+    if(!process.env.MONGODB_URI) {
         throw new Error("MONGO_URI is missing");
     }
 
