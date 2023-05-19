@@ -27,7 +27,7 @@ export default async function Home() {
             <Shortener />
             <div className="shorten-items-wrapper">
               <Suspense fallback={<div>Loading...</div>}>
-                {data.map((item) => (
+                {data.map((item: any) => (
                     <ShortenItem key={item._id} item={item} />
                 ))}
               </Suspense>
