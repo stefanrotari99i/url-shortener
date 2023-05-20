@@ -6,6 +6,7 @@ import { Suspense } from "react";
 
 export default async function Home() {
 
+    console.log("Home");
     const data = await getAllCollection("urls");
 
     return (
