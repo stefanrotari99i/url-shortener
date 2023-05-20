@@ -3,7 +3,7 @@ import Shortener from "@/components/Shortener";
 import getAllCollection from "@/firebase/firestore/getAllColletction";
 import { Suspense } from "react";
 
-export const revalidate = 10
+// export const revalidate = 10
 
 async function getData() {
     const data = await getAllCollection("urls");

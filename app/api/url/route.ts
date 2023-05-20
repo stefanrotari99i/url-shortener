@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import addData from "@/firebase/firestore/addData";
+import { revalidateTag } from "next/cache";
 
 
 export async function POST(request: Request) {
@@ -18,8 +19,8 @@ export async function POST(request: Request) {
         if (error) {
             return NextResponse.json({ error: error });
         }
-        
-        return NextResponse.json({ 
+        revalidateTag("urls");
+        return NextResponse.json({
             shortUrl,
             longUrl,
             clicks: 0,
