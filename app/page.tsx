@@ -4,14 +4,9 @@ import getAllCollection from "@/firebase/firestore/getAllColletction";
 import { Suspense } from "react";
 
 
-async function getData() {
-    const response = await getAllCollection("urls");
-    return response;
-}
-
 export default async function Home() {
 
-    const data = await getData();
+    const data = await getAllCollection("urls");
 
     return (
         <main className="flex min-h-screen flex-col items-center py-20">
