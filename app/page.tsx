@@ -3,24 +3,18 @@ import Shortener from "@/components/Shortener";
 import getAllCollection from "@/firebase/firestore/getAllColletction";
 import { Suspense } from "react";
 
-// export const revalidate = 10
+export const revalidate = 10
 
 async function getData() {
     const data = await getAllCollection("urls");
-    return {
-        props: {
-            data,
-        },
-        revalidate: 10,
-    }
+    return data
 }
 
 
 
 export default async function Home() {
 
-    const result = await getData();
-    const data = result.props.data;
+    const data = await getData();
 
     return (
         <main className="flex min-h-screen flex-col items-center py-20">
