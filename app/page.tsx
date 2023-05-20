@@ -7,13 +7,20 @@ import { Suspense } from "react";
 
 async function getData() {
     const data = await getAllCollection("urls");
-    return data
+    return {
+        props: {
+            data,
+        },
+        revalidate: 10,
+    }
 }
+
 
 
 export default async function Home() {
 
-    const data = await getData();
+    const result = await getData();
+    const data = result.props.data;
 
     return (
         <main className="flex min-h-screen flex-col items-center py-20">
