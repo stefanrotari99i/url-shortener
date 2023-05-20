@@ -9,6 +9,8 @@ export default async function Home() {
     console.log("Home");
     const data = await getAllCollection("urls");
 
+    alert(JSON.stringify(data));
+
     return (
         <main className="flex min-h-screen flex-col items-center py-20">
             <h1 className="text-6xl font-bold mb-4 w-full text-center">
