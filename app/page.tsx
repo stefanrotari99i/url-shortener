@@ -6,12 +6,10 @@ import { Suspense } from "react";
 
 export default async function Home() {
 
-    console.log("Home");
     const data = await getAllCollection("urls");
+    
+    return <div>Loading...</div>
 
-    if(!data) {
-        return <div>Loading...</div>
-    }
 
     return (
         <main className="flex min-h-screen flex-col items-center py-20">
