@@ -1,17 +1,17 @@
 import ShortenItem from "@/components/ShortenItem";
 import Shortener from "@/components/Shortener";
-import getData from "@/utils/getData";
+import getAllCollection from "@/firebase/firestore/getAllColletction";
 import { Suspense } from "react";
 
-const getShortenItems = async () => {
-    const rest = await getData();
-    return rest;
-};
+
+async function getData() {
+    const response = await getAllCollection("urls");
+    return response;
+}
 
 export default async function Home() {
-    const data = await JSON.parse(JSON.stringify(await getShortenItems()));
 
-    console.log(data);
+    const data = await getData();
 
     return (
         <main className="flex min-h-screen flex-col items-center py-20">
@@ -27,8 +27,11 @@ export default async function Home() {
             <Shortener />
             <div className="shorten-items-wrapper">
               <Suspense fallback={<div>Loading...</div>}>
-                {data.map((item: any) => (
-                    <ShortenItem key={item._id} item={item} />
+                {data?.result?.map((item: any) => (
+                    <ShortenItem
+                        key={item.id}
+                        item={item}
+                    />
                 ))}
               </Suspense>
             </div>

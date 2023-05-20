@@ -11,19 +11,19 @@ const Shortener = () => {
     let [result, setResult] = useState("") as any;
     let [error, setError] = useState("") as any;
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-        setError("");
-        setIsLoading(true);
-
-
+        e.persist();
 
         if (!validateUrl(url)) {
-            setError("Please add a valid link");
-            setIsLoading(false);
+            setError("Please enter a valid URL");
             return;
         }
+        setIsLoading(true);
+        await apiRequest();
+    };
 
+    const apiRequest = async () => {
         try {
             const response = await fetch("/api/url/", {
                 method: "POST",
@@ -33,12 +33,10 @@ const Shortener = () => {
                 body: JSON.stringify({
                     longUrl: url,
                 }),
-            });
-
+            });;
             if (response.ok) {
                 const result = await response.json();
-                setResult(result.url.shortUrl);
-                setUrl("");
+                setResult(result.shortUrl);
                 setError("");
                 setIsLoading(false);
             } else {
@@ -50,10 +48,8 @@ const Shortener = () => {
             setError(error.message);
             setIsLoading(false);
         }
-
-        setIsLoading(false);
-        setError("");
     };
+
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(`${window.location.origin}/r/${result}`);
@@ -62,6 +58,7 @@ const Shortener = () => {
     const resetForm = () => {
         setUrl("");
         setResult("");
+        setError("");
         setIsLoading(false);
     };
 
@@ -73,10 +70,11 @@ const Shortener = () => {
         });
     };
 
+
     return (
         <form
-            className="flex items-center gap-4 w-full relative flex-col md:flex-row"
             onSubmit={handleSubmit}
+            className="flex items-center gap-4 w-full relative flex-col md:flex-row"
         >
             {error && (
                 <p className="text-red-500 text-md font-semibold absolute -top-8 pointer-events-none">
@@ -108,10 +106,14 @@ const Shortener = () => {
             ) : (
                 <Input
                     value={url}
-                    onChange={(e) => setUrl(e.target.value)}
                     palceholder="Paste your URL here"
+                    name="url"
                     className="flex-1"
                     disabled={isLoading}
+                    onChange={(e) => {
+                        setUrl(e.target.value);
+                        setError("");
+                    }}
                     error={error}
                 />
             )}
@@ -128,7 +130,7 @@ const Shortener = () => {
                     label="Shorten URL"
                     type="submit"
                     className="h-12"
-                    disabled={!url}
+                    disabled={url.length === 0 || isLoading}
                     isLoading={isLoading}
                 />
             )}
