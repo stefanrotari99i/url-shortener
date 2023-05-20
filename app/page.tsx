@@ -9,7 +9,9 @@ export default async function Home() {
     console.log("Home");
     const data = await getAllCollection("urls");
 
-    alert(JSON.stringify(data));
+    if(!data) {
+        return <div>Loading...</div>
+    }
 
     return (
         <main className="flex min-h-screen flex-col items-center py-20">
