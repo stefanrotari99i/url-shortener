@@ -3,15 +3,14 @@ import { nanoid } from "nanoid";
 import addData from "@/firebase/firestore/addData";
 import { revalidateTag } from "next/cache";
 
-
 export async function POST(request: Request) {
     const { longUrl } = await request.json();
     const shortUrl = nanoid(6);
 
     try {
-        const {result, error} = await addData("urls", shortUrl, { 
-            longUrl, 
-            shortUrl, 
+        const { result, error } = await addData("urls", shortUrl, {
+            longUrl,
+            shortUrl,
             clicks: 0,
             createdAt: new Date().toISOString(),
         });
@@ -19,6 +18,7 @@ export async function POST(request: Request) {
         if (error) {
             return NextResponse.json({ error: error });
         }
+
         revalidateTag("home");
         return NextResponse.json({
             shortUrl,

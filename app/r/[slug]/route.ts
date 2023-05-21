@@ -11,9 +11,12 @@ export async function GET(
         params: { slug: string };
     }
 ) {
-
-    const {result, error} = await getData("urls", params.slug);
+    const { result, error } = await getData("urls", params.slug);
     const shortUrl = result?.data();
+
+    if (error) {
+        return NextResponse.json({ error: error });
+    }
 
     if (shortUrl) {
         try {
@@ -26,5 +29,3 @@ export async function GET(
         return NextResponse.redirect("/");
     }
 }
-
-
