@@ -15,7 +15,7 @@ export default async function Home() {
     const shortUrl = async (url: string) => {
         "use server";
 
-        const response = await fetch("https://url-shortener-rust.vercel.app/api/url", {
+        const response = await fetch("http://www.zipr.ltd/api/url", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
