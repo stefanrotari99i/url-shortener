@@ -1,9 +1,8 @@
 import ShortenItem from "@/components/ShortenItem";
-import getAllCollection from "@/firebase/firestore/getAllColletction";
-import { Suspense } from "react";
 import Shortener from "@/components/Shortener";
+import getAllCollection from "@/firebase/firestore/getAllColletction";
 import { revalidatePath } from "next/cache";
-import { validateUrl } from "@/utils/validateUrl";
+import { Suspense } from "react";
 
 async function getData() {
     const data = await getAllCollection("urls");
@@ -16,7 +15,7 @@ export default async function Home() {
     const shortUrl = async (url: string) => {
         "use server";
 
-        const response = await fetch("https://url-shortener-rust.vercel.app/api/url/", {
+        const response = await fetch("https://url-shortener-rust.vercel.app/api/url", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

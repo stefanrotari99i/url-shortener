@@ -1,9 +1,9 @@
 "use client";
+import { validateUrl } from "@/utils/validateUrl";
 import { useState, useTransition } from "react";
 import { BiCopy, BiShareAlt } from "react-icons/bi";
 import Button from "./Button";
 import Input from "./Input";
-import { validateUrl } from "@/utils/validateUrl";
 
 const Shortener = ({ action }: { action: any }) => {
     let [url, setUrl] = useState("");
