@@ -18,9 +18,7 @@
 
 
 body {
-  /* bg image #000 with image overlay */
   background: #000 url('../public/bg.svg') no-repeat center top;
-  /* background: #000; */
   background-size: cover;
   color: #fff;
   position: relative;

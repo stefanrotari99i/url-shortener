@@ -4,9 +4,10 @@ import "./globals.css";
 const inter = Jost({ subsets: ["latin"] });
 
 export const metadata = {
-    title: "Swiftly - URL Shortener",
+    title: "Zipr - URL Shortener",
     description: "A simple URL shortener!",
-    tags: ["url", "shortener", "swiftly"],
+    tags: ["url", "shortener", "zipr", "zipr.itd", "link", "shorten"],
+    robots: "index, follow",
 };
 
 export default function RootLayout({
