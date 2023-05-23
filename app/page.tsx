@@ -1,20 +1,43 @@
 import ShortenItem from "@/components/ShortenItem";
-import Shortener from "@/components/Shortener";
 import getAllCollection from "@/firebase/firestore/getAllColletction";
 import { Suspense } from "react";
-
-export const revalidate = 10
+import Shortener from "@/components/Shortener";
+import { revalidatePath } from "next/cache";
+import { validateUrl } from "@/utils/validateUrl";
 
 async function getData() {
     const data = await getAllCollection("urls");
-    return data
+    return data;
 }
 
-
-
 export default async function Home() {
-
     const data = await getData();
+
+    const shortUrl = async (url: string) => {
+        "use server";
+
+        const response = await fetch("https://url-shortener-rust.vercel.app/api/url/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                longUrl: url,
+            }),
+            next: {
+                revalidate: 0,
+            },
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            revalidatePath("/");
+            return result.shortUrl;
+        } else {
+            const result = await response.json();
+            return result.message;
+        }
+    };
 
     return (
         <main className="flex min-h-screen flex-col items-center py-20">
@@ -27,16 +50,14 @@ export default async function Home() {
                 Just paste your URL below and click on the button to get a
                 shortened URL!
             </h2>
-            <Shortener />
+            <Shortener action={shortUrl} />
+
             <div className="shorten-items-wrapper">
-              <Suspense fallback={<div>Loading...</div>}>
-                {data?.result?.map((item: any) => (
-                    <ShortenItem
-                        key={item.id}
-                        item={item}
-                    />
-                ))}
-              </Suspense>
+                <Suspense fallback={<div>Loading...</div>}>
+                    {data?.result?.map((item: any) => (
+                        <ShortenItem key={item.id} item={item} />
+                    ))}
+                </Suspense>
             </div>
         </main>
     );

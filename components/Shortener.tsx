@@ -1,55 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { BiCopy, BiShareAlt } from "react-icons/bi";
 import Button from "./Button";
 import Input from "./Input";
 import { validateUrl } from "@/utils/validateUrl";
 
-const Shortener = () => {
+const Shortener = ({ action }: { action: any }) => {
     let [url, setUrl] = useState("");
     let [isLoading, setIsLoading] = useState(false);
     let [result, setResult] = useState("") as any;
     let [error, setError] = useState("") as any;
-
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-        e.persist();
-
-        if (!validateUrl(url)) {
-            setError("Please enter a valid URL");
-            return;
-        }
-        setIsLoading(true);
-        await apiRequest();
-    };
-
-    const apiRequest = async () => {
-        try {
-            const response = await fetch("/api/url/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    longUrl: url,
-                }),
-            });;
-            if (response.ok) {
-                const result = await response.json();
-                setResult(result.shortUrl);
-                setError("");
-                setIsLoading(false);
-            } else {
-                const result = await response.json();
-                setError(result.message);
-                setIsLoading(false);
-            }
-        } catch (error: any) {
-            setError(error.message);
-            setIsLoading(false);
-        }
-    };
-
+    let [isPending, startTransition] = useTransition();
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(`${window.location.origin}/r/${result}`);
@@ -70,10 +31,27 @@ const Shortener = () => {
         });
     };
 
+    const onSubmit = async (e: any) => {
+        e.preventDefault();
+
+        if (!validateUrl(url)) {
+            setError("Please enter a valid URL");
+            return;
+        }
+
+        setIsLoading(true);
+
+        startTransition(() => {
+            action(url).then((res: any) => {
+                setResult(res);
+                setIsLoading(false);
+            });
+        });
+    };
 
     return (
         <form
-            onSubmit={handleSubmit}
+            onSubmit={(e) => onSubmit(e)}
             className="flex items-center gap-4 w-full relative flex-col md:flex-row"
         >
             {error && (
